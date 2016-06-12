@@ -7,16 +7,16 @@ namespace TinyMUD
 	{
 		public static readonly DateTime UTC = new DateTime(1970, 1, 1, 0, 0, 0, 0);
 		private static readonly Stopwatch sinceStartup = new Stopwatch();
-		private static long timeStartup;
+		private static double timeStartup;
 
 		public static long Now
 		{
-			get { return timeStartup + sinceStartup.ElapsedMilliseconds * 1000; }
+			get { return (long)((timeStartup + sinceStartup.Elapsed.TotalMilliseconds) * 1000 + 0.5); }
 		}
 
 		public static long Elapsed
 		{
-			get { return sinceStartup.ElapsedMilliseconds * 1000; }
+			get { return (long)(sinceStartup.Elapsed.TotalMilliseconds * 1000 + 0.5); }
 		}
 
 		public static void Initialize()
@@ -25,7 +25,7 @@ namespace TinyMUD
 			{
 				sinceStartup.Start();
 				TimeSpan ts = DateTime.UtcNow - UTC;
-				timeStartup = (long)(ts.TotalMilliseconds * 1000);
+				timeStartup = ts.TotalMilliseconds;
 			}
 		}
 	}
