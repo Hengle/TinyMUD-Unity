@@ -734,7 +734,7 @@ namespace TinyMUD
 							{
 								socket.Socket.Close();
 							}, null, Timeout.Infinite, Timeout.Infinite);
-							socket.Socket.BeginConnect(ip, port, result =>
+							socket.Socket.BeginConnect(iplist, port, result =>
 							{
 								try
 								{
