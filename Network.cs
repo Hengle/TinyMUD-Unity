@@ -445,18 +445,18 @@ namespace TinyMUD
 
 		public NetHandler Connect(string hostport, int timeout)
 		{
-			Regex regex = new Regex("^(.+):(\\d+)$", RegexOptions.Singleline);
+			Regex regex = new Regex("^(?<host>.+):(?<port>\\d+)$", RegexOptions.Multiline);
 			Match match = regex.Match(hostport);
 			return !match.Success ? null :
-				Connect(match.Captures[0].Value, Convert.ToInt32(match.Captures[1].Value), timeout);
+				Connect(match.Groups["host"].Captures[0].Value, Convert.ToInt32(match.Groups["port"].Captures[0].Value), timeout);
 		}
 
 		public void Connect(string hostport, int timeout, Action<NetHandler, Exception> callback)
 		{
-			Regex regex = new Regex("^(.+):(\\d+)$", RegexOptions.Singleline);
+			Regex regex = new Regex("^(?<host>.+):(?<port>\\d+)$", RegexOptions.Multiline);
 			Match match = regex.Match(hostport);
 			if (match.Success)
-				Connect(match.Captures[0].Value, Convert.ToInt32(match.Captures[1].Value), timeout, callback);
+				Connect(match.Groups["host"].Captures[0].Value, Convert.ToInt32(match.Groups["port"].Captures[0].Value), timeout, callback);
 		}
 
 		public NetHandler Connect(string host, int port, int timeout)
@@ -991,7 +991,6 @@ namespace TinyMUD
 
 		public override bool Send(NetHandler handler)
 		{
-			
 			if (!handler.Send(BufferSegment.Make(System.Text.Encoding.UTF8.GetBytes(Value)), BufferSegment.Make(0)))
 				return false;
 			return true;
