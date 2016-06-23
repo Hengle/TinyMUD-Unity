@@ -572,7 +572,8 @@ namespace TinyMUD
 						if (socket.need_send)
 							writers.Add(socket.Socket);
 					}
-					Socket.Select(reads, writers, errors, (int)settings.timeout);
+					Socket.Select(reads, writers, null, (int)settings.timeout);
+					Socket.Select(null, null, errors, 0);
 					for (int i = 0; i < writers.Count; i++)
 					{
 						NetHandlerImpl socket = sockethandlers[writers[i]];
