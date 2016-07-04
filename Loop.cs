@@ -219,31 +219,34 @@ namespace TinyMUD
 
 			void Update()
 			{
-				lock (actions)
+				if (actions.Count > 0)
 				{
-					var tmp = actions_tmp;
-					actions_tmp = actions;
-					actions = tmp;
-				}
-				for (int i = 0, j = actions_tmp.Count; i < j; ++i)
-				{
-					try
+					lock (actions)
 					{
-						actions_tmp[i]();
+						var tmp = actions_tmp;
+						actions_tmp = actions;
+						actions = tmp;
 					}
-					catch (Exception e)
+					for (int i = 0, j = actions_tmp.Count; i < j; ++i)
 					{
 						try
 						{
-							if (OnException != null)
-								OnException(e);
+							actions_tmp[i]();
 						}
-						catch
+						catch (Exception e)
 						{
+							try
+							{
+								if (OnException != null)
+									OnException(e);
+							}
+							catch
+							{
+							}
 						}
 					}
+					actions_tmp.Clear();
 				}
-				actions_tmp.Clear();
 				if (always_actions_async.Count > 0)
 				{
 					lock (always_actions_async)
