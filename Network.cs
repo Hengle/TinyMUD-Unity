@@ -669,6 +669,11 @@ namespace TinyMUD
 					errors.Clear();
 					sockethandlers.Clear();
 				}
+				for (int i = 0; i < sockets.Count; ++i)
+				{
+					sockets[i].Socket.Close();
+				}
+				sockets.Clear();
 			}).Start();
 		}
 		#endregion
